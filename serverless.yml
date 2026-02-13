@@ -1,0 +1,28 @@
+# "org" ensures this Service is used with the correct Serverless Framework Access Key.
+org: right29
+# "app" enables Serverless Framework Dashboard features and sharing them with other Services.
+app: notes-api
+# "service" is the name of this project. This will also be added to your AWS resource names.
+service: notes-api
+
+package:
+  individually: true
+
+plugins:
+  
+  - serverless-offline
+ 
+
+provider:
+  name: aws
+  runtime: nodejs20.x
+  stage: prod
+  region:  ap-south-1
+
+functions:
+  hello:
+    handler: handler.hello
+    events:
+      - http:
+          path: hello
+          method: get
