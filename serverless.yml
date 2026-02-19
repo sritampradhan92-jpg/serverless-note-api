@@ -5,19 +5,33 @@ app: notes-api
 # "service" is the name of this project. This will also be added to your AWS resource names.
 service: notes-api
 
+
 package:
   individually: true
 
 plugins:
-  
-  - serverless-offline
- 
+- serverless-offline
 
 provider:
   name: aws
   runtime: nodejs20.x
   stage: prod
-  region:  ap-south-1
+  region: ap-south-1
+
+  environment:
+    TABLE_NAME: notes  
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - dynamodb:PutItem
+            - dynamodb:GetItem
+            - dynamodb:Scan
+            - dynamodb:Query
+            - dynamodb:UpdateItem
+            - dynamodb:DeleteItem
+          Resource: "*"
 
 functions:
   hello:
@@ -26,3 +40,36 @@ functions:
       - http:
           path: hello
           method: get
+
+  
+  create:
+    handler: create.main
+    events:
+      - http:
+          path: notes
+          method: post
+
+  get:
+    handler: get.main
+    events:
+      - http:
+          path: notes/{id}
+          method: get
+  list:
+    handler: list.main
+    events:
+      - http:
+          path: notes
+          method: get
+  update:
+    handler: update.main
+    events:
+      - http:
+          path: notes/{id}
+          method: put
+  delete:
+    handler: delete.main
+    events:
+      - http:
+          path: notes/{id}
+          method: delete
