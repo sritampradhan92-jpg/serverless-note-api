@@ -9,8 +9,8 @@ module.exports.main = handler(async (event) => {
   const params = {
     TableName: process.env.TABLE_NAME,
     Key: {
-      userId: "123",
-      noteid: event.pathParameters.id,
+      userId: event.requestContext.identity.cognitoIdentityId,
+      noteid: event.pathParameters.id  // must match table exactly
     },
   };
 
